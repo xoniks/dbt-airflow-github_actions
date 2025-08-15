@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from airflow import DAG
-from airflow.operators.http_operator import SimpleHttpOperator
-from airflow.operators.dummy_operator import DummyOperator
+from airflow.providers.http.operators.http import SimpleHttpOperator
+from airflow.operators.dummy import DummyOperator
 
 default_args = {
     'owner': 'data-team',
@@ -17,7 +17,7 @@ dag = DAG(
     'trigger_dbt_github_action',
     default_args=default_args,
     description='Trigger GitHub Action to run dbt models',
-    schedule_interval=timedelta(hours=6),
+    schedule_interval=timedelta(hours=1),
     catchup=False,
     tags=['dbt', 'github-actions'],
 )
@@ -30,13 +30,14 @@ start_task = DummyOperator(
 trigger_github_action = SimpleHttpOperator(
     task_id='trigger_dbt_run',
     http_conn_id='github_api',
-    endpoint='repos/YOUR_USERNAME/dbt-airflow-github_actions/dispatches',
+    endpoint='repos/{{var.value.github_repo}}/dispatches',
     method='POST',
     headers={
         'Accept': 'application/vnd.github.v3+json',
         'Authorization': 'token {{ var.value.github_token }}'
     },
     data='{"event_type": "trigger-dbt-run"}',
+    log_response=True,
     dag=dag,
 )
 

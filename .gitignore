@@ -136,6 +136,16 @@ ENV/
 env.bak/
 venv.bak/
 
+# dbt
+target/
+dbt_packages/
+
+# Airflow
+airflow/logs/
+airflow/airflow.db
+airflow/airflow.cfg
+airflow/webserver_config.py
+
 # Spyder project settings
 .spyderproject
 .spyproject
