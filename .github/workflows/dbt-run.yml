@@ -1,0 +1,36 @@
+name: dbt Run
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [trigger-dbt-run]
+  push:
+    branches: [main]
+    paths:
+      - 'models/**'
+      - 'dbt_project.yml'
+
+jobs:
+  dbt-run:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      - name: Install dbt
+        run: |
+          pip install dbt-databricks
+          
+      - name: Run dbt
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_HTTP_PATH: ${{ secrets.DATABRICKS_HTTP_PATH }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          dbt run

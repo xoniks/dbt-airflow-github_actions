@@ -1,0 +1,11 @@
+name: simple_dbt_project
+version: '1.0.0'
+config-version: 2
+
+profile: default
+
+model-paths: ["models"]
+
+models:
+  simple_dbt_project:
+    +materialized: table

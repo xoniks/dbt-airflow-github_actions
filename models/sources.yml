@@ -1,0 +1,18 @@
+version: 2
+
+sources:
+  - name: ecom
+    catalog: workspace
+    schema: default
+    tables:
+      - name: raw_customers
+        columns:
+          - name: id
+          - name: name
+      - name: raw_suppliers
+        columns:
+          - name: id
+          - name: name
+          - name: cost
+          - name: perishable
+          - name: sku
