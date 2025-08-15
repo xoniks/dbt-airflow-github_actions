@@ -6,6 +6,9 @@ profile: default
 
 model-paths: ["models"]
 
+flags:
+  use_materialization_v2: true
+
 models:
   simple_dbt_project:
     +materialized: table
